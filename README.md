@@ -21,11 +21,7 @@ $ docker exec -it NAMES bash
 ### 実行
 
 ```
-$ mv local.properties local.properties.bk
-$ docker run -t -i -v `pwd`:/workspace tshrkmd/android-build:0.1 start-emulator "./gradlew connectedAndroidTest"
-$ mv local.properties.bk local.properties
-
-
+$ docker run -t -i -v `pwd`:/workspace tshrkmd/android-build:0.1 ./gradlew assembleDebug
 ```
 
 
@@ -34,7 +30,4 @@ $ mv local.properties.bk local.properties
 ```
 docker ps -a | awk '{print $1}' | tail -n +2 | xargs docker rm
 ```
-
-
-docker run -i -t -d 53100891f685 /bin/bash
 
