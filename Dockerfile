@@ -21,21 +21,14 @@ ENV PATH ${ANDROID_HOME}/tools:$ANDROID_HOME/platform-tools:$PATH
 # Install Android SDK components
 ENV ANDROID_COMPONENTS platform-tools,build-tools-23.0.3,build-tools-24.0.1,android-19,android-23,android-24
 ENV GOOGLE_COMPONENTS extra-android-m2repository,extra-google-m2repository
-ENV GOOGLE_EMULATOR sys-img-armeabi-v7a-android-19
-ENV GOOGLE_EMULATOR_PREVIEW sys-img-armeabi-v7a-android-24
 
 RUN echo y | android update sdk --no-ui --all --filter "${ANDROID_COMPONENTS}"
 RUN echo y | android update sdk --no-ui --all --filter "${GOOGLE_COMPONENTS}"
-RUN echo y | android update sdk --no-ui --all --filter "${GOOGLE_EMULATOR}"
-RUN echo y | android update sdk --no-ui --all --filter "${GOOGLE_EMULATOR_PREVIEW}"
 
 # Support Gradle
 ENV TERM dumb
 ENV JAVA_OPTS -Xms256m -Xmx512m
 
-# Set up and run emulator
-RUN echo no | android create avd -f -n android-19-v7a -t android-19 -s HVGA
-
 # WORKSPACE
-VOLUME /workspace
+RUN mkdir /workspace
 WORKDIR /workspace
