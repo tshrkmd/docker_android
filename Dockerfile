@@ -2,7 +2,10 @@ FROM ubuntu:16.04
 
 MAINTAINER Toshihiro.Kamada <tshrkmd@gmail.com>
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV ANDROID_HOME=/usr/local/android-sdk-linux \
+    ANDROID_SDK_VERSION=r25.2.5 \
+    ANDROID_BUILD_TOOLS=26.0.2 \
+    DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
 RUN dpkg --add-architecture i386 \
@@ -14,9 +17,6 @@ RUN dpkg --add-architecture i386 \
     apt-get clean
 
 # Download and untar SDK
-ENV ANDROID_HOME /usr/local/android-sdk-linux
-ENV ANDROID_SDK_VERSION r25.2.5
-ENV ANDROID_BUILD_TOOLS 26.0.1
 RUN curl -L https://dl.google.com/android/repository/tools_${ANDROID_SDK_VERSION}-linux.zip -o tools_${ANDROID_SDK_VERSION}-linux.zip  \
     && unzip -q tools_${ANDROID_SDK_VERSION}-linux.zip -d ${ANDROID_HOME}  \
     && rm -rf tools_${ANDROID_SDK_VERSION}-linux.zip
@@ -36,16 +36,11 @@ RUN sdkmanager "tools" "platform-tools" "build-tools;${ANDROID_BUILD_TOOLS}" "pl
     "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" \
     "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
 
-# Workaround for host bitness error with android emulator
-# https://stackoverflow.com/a/37604675/455578
-RUN mv /bin/sh /bin/sh.backup \
-  && cp /bin/bash /bin/sh
-
 # Add tools from travis
 ADD https://raw.githubusercontent.com/travis-ci/travis-cookbooks/master/community-cookbooks/android-sdk/files/default/android-wait-for-emulator /usr/local/bin/android-wait-for-emulator
 RUN chmod +x /usr/local/bin/android-wait-for-emulator
 
-# create avd
+# Create avd
 RUN echo no | avdmanager -v create avd --force --name test --abi google_apis/x86_64 --package "system-images;android-25;google_apis;x86_64"
 
 # WORKSPACE
