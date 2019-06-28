@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-MAINTAINER Toshihiro.Kamada <tshrkmd@gmail.com>
-
 ENV ANDROID_HOME=/usr/local/android-sdk-linux \
     ANDROID_SDK_VERSION=r25.2.5 \
     ANDROID_BUILD_TOOLS=26.0.2 \
